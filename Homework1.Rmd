@@ -1,0 +1,214 @@
+---
+title: "HW1"
+author: "Hanao Li"
+date: "September 10, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### Homework 1
+
+#### i)
+```{r}
+if(!require("pacman")) install.packages("pacman")
+p_load(Sleuth3, bootstrap)
+
+#Load Data
+data <- case0102
+
+#Box Plot
+boxplot(data$Salary)
+#There is an outlier for the combined data
+
+#Density
+```
+
+```{r}
+#Check missing
+any(is.na(data))
+#There is no missing values for salaries and gender
+```
+
+#### ii)
+```{r}
+mdata <- data[data$Sex == "Male",]
+fdata <- data[data$Sex == "Female",]
+
+#Male Boxplot
+boxplot(mdata$Salary)
+#There is an outlier for the male data
+
+#Histogram
+hist(mdata$Salary)
+#Hard to tell the distribution of Male Data Salary
+
+#Scatterplot
+plot(mdata$Salary)
+#Salray Increasing as index increases
+
+#Density
+plot(density(mdata$Salary))
+
+#QQ
+qqnorm(mdata$Salary)
+
+#SD
+sd(mdata$Salary)
+
+#Var
+var(mdata$Salary)
+
+#IQR
+IQR(mdata$Salary)
+
+#Summary
+summary(mdata$Salary)
+```
+
+```{r}
+#Female Boxplot
+boxplot(fdata$Salary)
+#There is no outlier for the female data
+
+#Histogram
+hist(fdata$Salary)
+#Distribution seems to be normal
+
+#Scatterplot
+plot(fdata$Salary)
+#Salary increasing as index increases
+
+#Density
+plot(density(fdata$Salary))
+
+#QQ
+qqnorm(fdata$Salary)
+
+#SD
+sd(fdata$Salary)
+
+#Var
+var(fdata$Salary)
+
+#IQR
+IQR(fdata$Salary)
+
+#Summary
+summary(fdata$Salary)
+```
+
+#### iii)
+```{r}
+#Male Jackknife
+
+#Mean estimator
+mj_mean <- jackknife(mdata$Salary, mean)
+mj_mean
+
+#SD estimator
+mj_sd <- jackknife(mdata$Salary, sd)
+mj_sd
+
+#Median estimator
+mj_median <- jackknife(mdata$Salary,median)
+mj_median
+
+#IQR estimator
+mj_iqr <- jackknife(mdata$Salary, IQR)
+mj_iqr
+```
+
+```{r}
+#Female Jackknife
+
+#Mean estimator
+fj_mean <- jackknife(fdata$Salary, mean)
+fj_mean
+
+#SD estimator
+fj_sd <- jackknife(fdata$Salary, sd)
+fj_sd
+
+#Median estimator
+fj_median <- jackknife(fdata$Salary,median)
+fj_median
+
+#IQR estimator
+fj_iqr <- jackknife(fdata$Salary, IQR)
+fj_iqr
+```
+
+```{r}
+#Male Bootstrap
+
+#Mean estimator
+mb_mean <- bootstrap(mdata$Salary,10000,mean)
+mean(mb_mean$thetastar)
+mb_meanbias <-mean(mb_mean$thetastar)-mean(mdata$Salary)
+mb_meanbias
+mb_meanvar <- var(mb_mean$thetastar)
+mb_meanvar
+
+#Median estimator
+mb_median <- bootstrap(mdata$Salary,10000,median)
+mean(mb_median$thetastar)
+mb_medianbias <-mean(mb_median$thetastar)-median(mdata$Salary)
+mb_medianbias
+mb_medianvar <- var(mb_median$thetastar)
+mb_medianvar
+
+#SD estimator
+mb_sd <- bootstrap(mdata$Salary,10000,sd)
+mean(mb_sd$thetastar)
+mb_sdbias <-mean(mb_sd$thetastar)-sd(mdata$Salary)
+mb_sdbias
+mb_sdvar <- var(mb_sd$thetastar)
+mb_sdvar
+
+#IQR estimator
+mb_iqr <- bootstrap(mdata$Salary,10000,IQR)
+mean(mb_iqr$thetastar)
+mb_iqrbias <-mean(mb_iqr$thetastar)-IQR(mdata$Salary)
+mb_iqrbias
+mb_iqrvar <- var(mb_iqr$thetastar)
+mb_iqrvar
+```
+
+```{r}
+#Female Bootstrap
+
+#Mean estimator
+fb_mean <- bootstrap(fdata$Salary,10000,mean)
+mean(fb_mean$thetastar)
+fb_meanbias <-mean(fb_mean$thetastar)-mean(fdata$Salary)
+fb_meanbias
+fb_meanvar <- var(fb_mean$thetastar)
+fb_meanvar
+
+#Median estimator
+fb_median <- bootstrap(fdata$Salary,10000,median)
+mean(fb_median$thetastar)
+fb_medianbias <-mean(fb_median$thetastar)-median(fdata$Salary)
+fb_medianbias
+fb_medianvar <- var(fb_median$thetastar)
+fb_medianvar
+
+#SD estimator
+fb_sd <- bootstrap(fdata$Salary,10000,sd)
+mean(fb_sd$thetastar)
+fb_sdbias <-mean(fb_sd$thetastar)-sd(fdata$Salary)
+fb_sdbias
+fb_sdvar <- var(fb_sd$thetastar)
+fb_sdvar
+
+#IQR estimator
+fb_iqr <- bootstrap(fdata$Salary,10000,IQR)
+mean(fb_iqr$thetastar)
+fb_iqrbias <-mean(fb_iqr$thetastar)-IQR(fdata$Salary)
+fb_iqrbias
+fb_iqrvar <- var(fb_iqr$thetastar)
+fb_iqrvar
+```
